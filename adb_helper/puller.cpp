@@ -15,7 +15,7 @@ using std::setw;
 using std::runtime_error;
 
 // file names
-const string packages_filename { "packages.txt" };
+const string packages_filename { "/tmp/adb.helper.packages" };
 const string temp_filename { "/tmp/adb.helper.tmp" };
 
 // symbolic names

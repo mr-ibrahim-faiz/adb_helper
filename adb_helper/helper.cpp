@@ -158,7 +158,7 @@ void backup_files()
 		clear_line(100);
 		display_progression(size-1, size);
 		cout << " Done.\n";
-		open_output_directory();
+		open_directory(backup_root_directory);
 	}
 	else cout << "There are no files to pull.\n";
 }
