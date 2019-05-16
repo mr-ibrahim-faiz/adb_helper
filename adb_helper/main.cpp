@@ -1,5 +1,7 @@
-#include "puller.h"
 #include "backup.h"
+#include "install.h"
+#include "helper.h"
+#include "shared.h"
 
 #include<iostream>
 using std::cin;
@@ -9,40 +11,37 @@ using std::cerr;
 #include<stdexcept>
 using std::runtime_error;
 
-// displays main menu
-void display_menu();
-
 int main()
 try
 {
+	// starts adb server
+	start_server();
+
 	// displays main menu
-	display_menu();
+	display_main_menu();
 
 	// gets user's choice
 	for(string choice; getline(cin, choice);){
-		if (choice.length() != 1) choice = INVALID_CHOICE;
+		if (choice.length() != valid_choice_length) choice = INVALID_CHOICE;
 
-		char& user_choice = choice[0];
+		const char& user_choice = choice[0];
 		cout << newline;
 
 		switch (user_choice) {
 		case '1': 
-			puller(Type::nosystem);
+			pull();
 			break;
 
 		case '2':
-			puller(Type::system);
+			backup_files();
 			break;
 
 		case '3':
-			puller(Type::all);
-			break;
-
-		case '4':
-			backup_directory("/sdcard/LuckyPatcher/Backup");
+			packages_installer(backup_root_directory+"Backup/");
 			break;
 
 		case exit_character:
+			kill_server();
 			break;
 
 		default:
@@ -53,7 +52,7 @@ try
 		if (user_choice == exit_character) break;
 		else {
 			cout << newline;
-			display_menu();
+			display_main_menu();
 		}
 	}
 
@@ -62,22 +61,12 @@ try
 	return 0;
 }
 catch(runtime_error& e){
-	cerr << "Error: " << e.what() << '\n';
+	const string error_message = "Error: " + string(e.what()) + "\n";
+	write_to_file(log_filename, error_message);
 	return 1;
 }
 catch(...){
-	cerr << "Error: unknown exception caught.\n";
+	cerr << "Error: something went wrong.\n";
+	write_to_file(log_filename, "Error: unknown exception caught.\n");
 	return 2;
-}
-
-// displays main menu
-void display_menu()
-// displays main menu
-// informs the user about available choices
-{
-	cout << "[1] Pull third-party apps\n";
-	cout << "[2] Pull system apps\n";
-	cout << "[3] Pull all apps\n";
-	cout << "[4] Back up LP/Directory\n";
-	cout << "[x] Exit\n";	
 }

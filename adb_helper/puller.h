@@ -6,26 +6,20 @@
 #include<vector>
 using std::vector;
 
-// file names
-const string packages_filename { "packages.txt" };
-const string temp_filename { "/tmp/puller_temp.txt" };
-
 // directory names
-const string pull_root_directory { "~/Desktop/" };
-
-// symbolic names
-constexpr char newline { '\n' };
-constexpr char exit_character { 'x' };
-const string INVALID_CHOICE = "0";
-const string package_prefix { "package:" };
+const string pull_root_directory { "~/Documents/Android/" };
 
 // user-defined type Type
+// defines the type of a package
 enum class Type {
 	nosystem, system, all
 };
 
-// symbolic names
-constexpr char delimiter { '=' };
+// user-defined type Mode
+// defines how a package is stored in the computer when pulled
+enum class Mode {
+	raw, name
+};
 
 // lists phone model
 void list_model();
@@ -34,7 +28,7 @@ void list_model();
 const string get_model();
 
 // lists packages
-void list_packages();
+void list_packages(const string& = string{});
 
 // removes prefix
 string remove_prefix(const string&, const size_t&);
@@ -42,16 +36,16 @@ string remove_prefix(const string&, const size_t&);
 // gets packages information
 vector<Package> get_packages_information(const Type&);
 
-// pulls a single package
-void pull_package(const Package&);
+// pulls a file or directory from device
+void pull_file(const string&, const string&);
 
-// displays progression
-void display_progression(const size_t&, const size_t &);
+// pulls a single package
+void pull_package(const Package&, const Mode& = Mode::raw);
 
 // opens output directory
 void open_output_directory();
 
 // packages puller
-void puller(const Type&);
+void packages_puller(const Type&, const string& = string{});
 
 #endif
