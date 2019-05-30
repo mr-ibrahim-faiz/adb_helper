@@ -129,13 +129,19 @@ void write_to_file(const string& filename, const string& stream, const ios_base:
 	else cout << "Error: unable to open \'" << filename << "\'.\n";
 }
 
+// checks if character is parenthesis
+bool isparenthesis(int c){
+	if(c == '(' || c == ')') return true;
+	return false;
+}
+
 // processes filename
 string process_name_if(const string& name)
 // makes sure the name of the file is valid
 {
 	string result;
 	for(const char& character: name){
-		if(isblank(character)) result.push_back(backslash);
+		if(isblank(character) || isparenthesis(character)) result.push_back(backslash);
 		result += character;
 	}
 	return result;

@@ -58,6 +58,9 @@ void display_progression(const size_t&, const size_t &);
 // writes to a file
 void write_to_file(const string&, const string&, const ios_base::openmode& = ios_base::app);
 
+// checks if character is parenthesis
+bool isparenthesis(int);
+
 // processes filename
 string process_name_if(const string&);
 
