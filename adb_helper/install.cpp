@@ -22,7 +22,7 @@ void install_package(const string& package_name){
 	catch(runtime_error& e){
 		const string error_message = "Error: " + string(e.what()) + "\n"; 
 		write_to_file(log_filename, error_message);
-		clear_line(100);
+		clear_line(150);
 		cerr << "Error: unable to install " << package_name << ".\n"; 
 	}
 }
@@ -41,12 +41,12 @@ void packages_installer(const string& path)
 		const size_t size = packages.size();
 		for(size_t i = 0; i < size; ++i){
 			const string& name = packages[i];
-			clear_line(100);
+			clear_line(150);
 			display_progression(i, size);
 			cout << " Installing " << name << " " << std::flush;
 			install_package(path + process_name_if(name));
 		}
-		clear_line(100);
+		clear_line(150);
 		display_progression(size-1, size);
 		cout << " Done.\n";
 

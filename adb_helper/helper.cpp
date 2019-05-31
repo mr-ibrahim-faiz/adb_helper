@@ -149,13 +149,13 @@ void backup_files()
 		const size_t size = paths.size();
 		for(size_t i = 0; i < size; ++i){
 			const string& path = paths[i];
-			clear_line(100);
+			clear_line(150);
 			display_progression(i, size);
 			cout << " Backing up " << path <<  " " << std::flush;
 			backup_and_remove_directory(path);
 		}
 
-		clear_line(100);
+		clear_line(150);
 		display_progression(size-1, size);
 		cout << " Done.\n";
 		open_directory(backup_root_directory);

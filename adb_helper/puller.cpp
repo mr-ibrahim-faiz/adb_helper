@@ -114,7 +114,7 @@ void pull_package(const Package& package, const Mode& mode)
 	catch(runtime_error& e){
 		const string error_message = "Error: " + string(e.what()) + "\n"; 
 		write_to_file(log_filename, error_message);
-		clear_line(100);
+		clear_line(150);
 		cerr << "Error: unable to pull " << package.Name() << ".\n"; 
 	}
 }
@@ -148,13 +148,13 @@ void packages_puller(const Type& type, const string& pattern)
 		const size_t size = packages.size();
 		for(size_t i = 0; i < size; ++i){
 			const Package& package = packages[i];
-			clear_line(100);
+			clear_line(150);
 			display_progression(i, size);
 			cout << " Pulling " << package.Name() <<  " " << std::flush;
 			pull_package(package, mode);
 		}
 
-		clear_line(100);
+		clear_line(150);
 		display_progression(size-1, size);
 		cout << " Done.\n";
 		open_output_directory();
