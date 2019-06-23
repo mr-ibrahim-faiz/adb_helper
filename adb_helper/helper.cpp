@@ -141,7 +141,10 @@ void backup_files()
 	// backs up LP/Backup
 	const string device_LP { "/sdcard/LuckyPatcher/Backup" };
 
-	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP };
+	// backs up TWRP
+	const string sdcard_twrp { "/storage/2065-AB5B/TWRP" };
+
+	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP, sdcard_twrp };
 
 	if(!paths.empty()){
 		cout << "Backing up file(s)...\n";
