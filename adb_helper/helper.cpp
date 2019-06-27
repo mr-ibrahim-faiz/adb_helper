@@ -1,6 +1,6 @@
 #include "helper.h"
 #include "puller.h"
-#include "backup.h"
+#include "backer.h"
 #include "shared.h"
 
 #include<iostream>
@@ -30,6 +30,7 @@ void display_main_menu()
 	cout << "[1] Pull\n";
 	cout << "[2] Backup files\n";
 	cout << "[3] Install apps from Backup directory\n";
+	cout << "[4] Debloat\n";
 	cout << "[x] Exit\n";	
 }
 

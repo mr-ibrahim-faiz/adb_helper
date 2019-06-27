@@ -1,5 +1,5 @@
-#ifndef BACKUP_H
-#define BACKUP_H
+#ifndef BACKER_H
+#define BACKER_H
 
 #include<string>
 using std::string;

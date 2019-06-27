@@ -15,14 +15,11 @@ using std::setw;
 using std::runtime_error;
 
 // file names
-const string packages_filename { "/tmp/adb.helper.packages" };
 const string temp_filename { "/tmp/adb.helper.tmp" };
 
 // symbolic names
 constexpr char carriage_return { '\r' };
-constexpr char delimiter { '=' };
 const string package_extension { ".apk" };
-const string package_prefix { "package:" };
 
 // lists phone model
 void list_model()
@@ -49,47 +46,11 @@ const string get_model()
 	return model;
 }
 
-// lists packages
-void list_packages(const string& pattern)
-// lists packages and associated files into a file
-// a pattern can be specified to refine the results
-{
-	const string command = "adb shell \'pm list packages -f" + ((pattern.empty())? "" : " | grep -i " + pattern) + "\' > " + packages_filename + " 2>&1";
-	run_command(command);
-}	
-
 // removes prefix
 string remove_prefix(const string& sequence, const size_t& length)
 // revmoves a number of characters from a sequence of string
 {
 	return sequence.substr(length);
-}
-
-// gets packages information
-vector<Package> get_packages_information(const Type& type)
-// gets packages information from file based on the type
-{
-	vector<Package> packages;
-	ifstream file(packages_filename);
-	if(file.is_open()){
-		const size_t length = package_prefix.size();
-		for(string raw, name, path; getline(file, raw);){
-			const size_t position = raw.find_last_of(delimiter);
-			path = raw.substr(0, position);
-			name = raw.substr(position+1);	
-			path = remove_prefix(path, length);
-			if(name.back()==carriage_return) name.pop_back(); // removes sneaky carriage return
-
-			if(!name.empty() && !path.empty()) {
-				Package package { name, path };
-				if(Type(package.System()) == type || type == Type::all) packages.push_back(package);
-			}
-		}
-		file.close();
-	}
-	else cerr << "Error: Unable to open \'" + packages_filename + "\'.\n";
-
-	return packages;
 }
 
 // pulls a file or directory from device

@@ -1,3 +1,4 @@
+#include "puller.h"
 #include "shared.h"
 
 #include<stdexcept>
@@ -17,10 +18,18 @@ using std::cout;
 #include<iomanip>
 using std::setw;
 
+#include<algorithm>
+using std::find_if;
+
+// file names
+const string packages_filename { "/tmp/adb.helper.packages" };
+
 // symbolic names
+constexpr char delimiter { '=' };
 const string empty_string { "" };
 constexpr char carriage_return { '\r' };
 constexpr char backslash { '\\' };
+const string package_prefix { "package:" };
 
 // runs command
 void run_command(const string& command)
@@ -50,7 +59,7 @@ void remove_directory(const string& directory){
 
 // removes directory from phone
 void remove_directory_phone(const string& directory){
-	const string command = "adb shell rm -rf " + directory;
+	const string command = "adb shell su -c rm -rf " + directory;
 	try { run_command(command); }
 	catch(runtime_error& e){ cerr << "Error: unable to remove directory \'" << directory << "\'.\n"; }
 }
@@ -59,6 +68,16 @@ void remove_directory_phone(const string& directory){
 string get_path(const string& filepath){
 	string path = filepath;
 	while(!path.empty() && path.back() != '/') path.pop_back();
+	return path;
+}
+
+// gets package path
+string get_package_path(const string& name, const vector<Package>& packages){
+	using const_iterator = typename vector<Package>::const_iterator;
+	const_iterator found = find_if(packages.begin(), packages.end(), [&](const Package& package) -> bool { return name == package.Name(); });
+	string path;
+	if(found != packages.end()) path = (*found).Path();
+	path = get_path(path);
 	return path;
 }
 
@@ -154,4 +173,40 @@ void clear_line(const int& length)
 	cout << carriage_return;
 	cout << setw(length) << empty_string;
 	cout << carriage_return;
+}
+
+// lists packages
+void list_packages(const string& pattern)
+// lists packages and associated files into a file
+// a pattern can be specified to refine the results
+{
+	const string command = "adb shell \'pm list packages -f" + ((pattern.empty())? "" : " | grep -i " + pattern) + "\' > " + packages_filename + " 2>&1";
+	run_command(command);
+}
+
+// gets packages information
+vector<Package> get_packages_information(const Type& type)
+// gets packages information from file based on the type
+{
+	vector<Package> packages;
+	ifstream file(packages_filename);
+	if(file.is_open()){
+		const size_t length = package_prefix.size();
+		for(string raw, name, path; getline(file, raw);){
+			const size_t position = raw.find_last_of(delimiter);
+			path = raw.substr(0, position);
+			name = raw.substr(position+1);
+			path = remove_prefix(path, length);
+			if(name.back()==carriage_return) name.pop_back(); // removes sneaky carriage return
+
+			if(!name.empty() && !path.empty()) {
+				Package package { name, path };
+				if(Type(package.System()) == type || type == Type::all) packages.push_back(package);
+			}
+		}
+		file.close();
+	}
+	else cerr << "Error: Unable to open \'" + packages_filename + "\'.\n";
+
+	return packages;
 }

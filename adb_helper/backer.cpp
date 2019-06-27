@@ -1,4 +1,4 @@
-#include "backup.h"
+#include "backer.h"
 #include "shared.h"
 
 #include<iostream>
@@ -16,7 +16,6 @@ int backup_directory(const string& directory_path)
 	const string command = "adb pull " + directory_path + " " + backup_root_directory + " >> " + log_filename; 
 	try {
 		run_command(command);
-		// open_directory(backup_root_directory);
 	}
 	catch(runtime_error& e){
 		const string error_message = "Error: " + string(e.what()) + "\n"; 

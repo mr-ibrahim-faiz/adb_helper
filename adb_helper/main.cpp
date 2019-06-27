@@ -1,5 +1,5 @@
-#include "backup.h"
-#include "install.h"
+#include "backer.h"
+#include "manager.h"
 #include "helper.h"
 #include "shared.h"
 
@@ -38,6 +38,10 @@ try
 
 		case '3':
 			packages_installer(backup_root_directory+"Backup/");
+			break;
+
+		case '4':
+			packages_uninstaller();
 			break;
 
 		case exit_character:

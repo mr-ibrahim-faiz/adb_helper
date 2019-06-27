@@ -1,6 +1,8 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include "package.h"
+
 #include<string>
 using std::string;
 
@@ -19,6 +21,12 @@ constexpr char no { 'n' };
 constexpr size_t valid_choice_length { 1 };
 const string INVALID_CHOICE = "0";
 
+// user-defined type Type
+// defines the type of a package
+enum class Type {
+	nosystem, system, all
+};
+
 // runs command
 void run_command(const string&);
 
@@ -36,6 +44,9 @@ void remove_directory_phone(const string&);
 
 // gets path
 string get_path(const string&);
+
+// gets package path
+string get_package_path(const string&, const vector<Package>&);
 
 // gets file name
 string get_filename(const string&);
@@ -66,5 +77,11 @@ string process_name_if(const string&);
 
 // clears line
 void clear_line(const int&);
+
+// lists packages
+void list_packages(const string& = string{});
+
+// gets packages information
+vector<Package> get_packages_information(const Type& = Type::all);
 
 #endif
