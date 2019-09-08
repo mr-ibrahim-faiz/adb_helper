@@ -128,60 +128,61 @@ void packages_uninstaller()
 	create_file(temp_uninstall_filename);
 	run_command("vim " + temp_uninstall_filename);
 	vector<string> packages = get_lines(temp_uninstall_filename);
-	const size_t size = packages.size();
+	const size_t package_size = packages.size();
 	vector<string> paths;
 
 	cout << "Getting packages information... \n";
 	list_packages();
 	vector<Package> packages_information = get_packages_information();
 
-	for(size_t i = 0; i < size; ++i) {
+	for(size_t i = 0; i < package_size; ++i) {
 		const string& name = packages[i];
 		clear_line(150);
-		display_progression(i, size);
+		display_progression(i, package_size);
 		cout << name << std::flush;
 		string path = get_package_path(name, packages_information);
 		if(!path.empty()) paths.push_back(path);
 	}
 	clear_line(150);
-	display_progression(size-1, size);
+	if(package_size == 0) display_progression(1, 2);
+	else display_progression(package_size -1, package_size);
 	cout << " Done.\n\n";
 
 	if(!packages.empty()){
 		cout << "Processing packages...\n";
 		
-		for(size_t i = 0; i < size; ++i){
+		for(size_t i = 0; i < package_size; ++i){
 			const string& name = packages[i];
 			clear_line(150);
-			display_progression(i, size);
+			display_progression(i, package_size);
 			cout << " Clearing " << name << "... " << std::flush;
 			clear_package(name, true);
 			clear_line(150);
-			display_progression(i, size);
+			display_progression(i, package_size);
 			cout << " Disabling " << name << "... " << std::flush;
 			disable_package(name, true);
 			clear_line(150);
-			display_progression(i, size);
+			display_progression(i, package_size);
 			cout << " Uninstalling " << name << "... " << std::flush;
 			uninstall_package(name, true);
 		}
 		clear_line(150);
-		display_progression(size-1, size);
+		display_progression(package_size-1, package_size);
 		cout << " Done.\n\n";
 		
 		if(!paths.empty()){
 			cout << "Removing folders... \n";
 			run_command(string("adb shell \'su -c \"mount -o rw,remount /system\"") + "\' >> " + log_filename + " 2>&1");
-			const size_t size = paths.size();
-			for(size_t i = 0; i < size; ++i){
+			const size_t paths_size = paths.size();
+			for(size_t i = 0; i < paths_size; ++i){
 				const string& path = paths[i];
 				clear_line(150);
-				display_progression(i, size);
+				display_progression(i, paths_size);
 				cout << " Removing " << path << "... " << std::flush;
 				remove_directory_phone(path);
 			}
 			clear_line(150);
-			display_progression(size-1, size);
+			display_progression(paths_size-1, paths_size);
 			run_command(string("adb shell \'su -c \"mount -o ro,remount /system\"") + "\' >> " + log_filename + " 2>&1");
 			cout << " Done.\n";
 		}

@@ -37,7 +37,7 @@ try
 			break;
 
 		case '3':
-			packages_installer(backup_root_directory+"Backup/");
+			packages_installer(backup_root_directory+"Backup\\");
 			break;
 
 		case '4':

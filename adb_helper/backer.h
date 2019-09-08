@@ -5,7 +5,7 @@
 using std::string;
 
 // directory names
-const string backup_root_directory { "~/Documents/Android/" };
+const string backup_root_directory { "D:\\Android\\" };
 
 // backs up directory
 int backup_directory(const string&);

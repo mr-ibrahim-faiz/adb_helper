@@ -143,9 +143,10 @@ void backup_files()
 	const string device_LP { "/sdcard/LuckyPatcher/Backup" };
 
 	// backs up TWRP
-	const string sdcard_twrp { "/storage/2065-AB5B/TWRP" };
+	// const string sdcard_twrp { "/storage/2065-AB5B/TWRP" };
 
-	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP, sdcard_twrp };
+	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP };
+	// const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP, sdcard_twrp };
 
 	if(!paths.empty()){
 		cout << "Backing up file(s)...\n";
@@ -194,7 +195,7 @@ void update_file(const string& filepath)
 			run_command("vim " + filepath_updated);
 
 			cout << "Pushing file... ";
-			run_command("adb push " + filepath_updated + " /sdcard/ > /dev/null 2>&1");
+			run_command("adb push " + filepath_updated + " /sdcard/ >nul 2>&1");
 			run_command(string("adb shell \'su -c \"mount -o rw,remount /system\"") + "\' >> " + log_filename + " 2>&1");
 			run_command("adb shell \'su -c \"mv /sdcard/" + filename + " " + filepath + "\"" + "\' >> " + log_filename + " 2>&1" );
 			run_command("adb shell \'su -c \"chmod 644 " + filepath + "\"" + "\' >> " + log_filename + " 2>&1");

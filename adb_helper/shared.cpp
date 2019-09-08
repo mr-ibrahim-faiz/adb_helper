@@ -41,7 +41,7 @@ void run_command(const string& command)
 
 // creates file if it doesn't exist
 void create_file(const string& filename){
-	run_command("touch " + filename);
+	run_command("type nul > " + filename);
 }
 
 // removes file
@@ -52,16 +52,16 @@ void remove_file(const string& filename){
 
 // removes directory from computer
 void remove_directory(const string& directory){
-	const string command = "rm -rdf " + directory;
+	const string command = "rmdir /Q /S " + directory;
 	try { run_command(command); }
-	catch(runtime_error& e){ cerr << "Error: unable to remove directory \'" << directory << "\'.\n"; }
+	catch(const runtime_error&){ cerr << "Error: unable to remove directory \'" << directory << "\'.\n"; }
 }
 
 // removes directory from phone
 void remove_directory_phone(const string& directory){
 	const string command = "adb shell su -c rm -rf " + directory;
 	try { run_command(command); }
-	catch(runtime_error& e){ cerr << "Error: unable to remove directory \'" << directory << "\'.\n"; }
+	catch(const runtime_error&){ cerr << "Error: unable to remove directory \'" << directory << "\'.\n"; }
 }
 
 // gets path
@@ -92,14 +92,15 @@ string get_filename(const string& filepath){
 
 // creates directory
 void create_directory(const string& path){
-	const string command = "mkdir -p "+ path;
+	const string command = "if not exist \"" + path + "\" mkdir \""+ path + "\"";
 	run_command(command);
 }
 
 // opens directory
 void open_directory(const string& path){
-	const string command = "xdg-open " + path;
-	run_command(command);
+	const string command = "explorer \"" + path + "\"";
+	try { run_command(command); } // catches false positive when calling explorer
+	catch (const runtime_error&) {};
 }
 
 // lists files
@@ -107,11 +108,11 @@ void list_files(const string& path_directory, const string& path_file, const str
 // lists files from a directory into a file
 // a pattern can be used to refine the results
 {
-	const string command = "ls " + path_directory + " > /tmp/list_backup.txt 2>&1 ; grep -i " + pattern + " /tmp/list_backup.txt > " + path_file + " ; rm /tmp/list_backup.txt";
+	const string command = "dir /b " + path_directory + "*" + pattern + " > " + path_file + " 2>&1";
 	try { run_command(command); }
-	catch(runtime_error& e) { 
+	catch(const runtime_error&) { 
 		remove_file(path_file); // prevents invalid data from being used
-		run_command("touch " + path_file);
+		create_file(path_file);
 		write_to_file(log_filename, "Error: unable to list files.\n"); 
 	}
 }
@@ -132,7 +133,7 @@ vector<string> get_lines(const string& filename)
 
 // displays progression
 void display_progression(const size_t& position, const size_t& total){
-	size_t percentage = (position+1)*(100.0/total);
+	size_t percentage = size_t ( (position + 1)*(100.0 / total) );
 	cout << "[" << setw(3) << percentage << "%]";
 }
 
@@ -180,7 +181,7 @@ void list_packages(const string& pattern)
 // lists packages and associated files into a file
 // a pattern can be specified to refine the results
 {
-	const string command = "adb shell \'pm list packages -f" + ((pattern.empty())? "" : " | grep -i " + pattern) + "\' > " + packages_filename + " 2>&1";
+	const string command = "adb shell \"pm list packages -f" + ((pattern.empty())? "" : " | grep -i " + pattern) + "\" > " + packages_filename + " 2>&1";
 	run_command(command);
 }
 
@@ -200,7 +201,7 @@ vector<Package> get_packages_information(const Type& type)
 			if(name.back()==carriage_return) name.pop_back(); // removes sneaky carriage return
 
 			if(!name.empty() && !path.empty()) {
-				Package package { name, path };
+				Package package ( name, path );
 				if(Type(package.System()) == type || type == Type::all) packages.push_back(package);
 			}
 		}

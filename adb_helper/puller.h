@@ -7,7 +7,7 @@
 using std::vector;
 
 // directory names
-const string pull_root_directory { "~/Documents/Android/" };
+const string pull_root_directory { "D:\\Android\\" };
 
 // user-defined type Mode
 // defines how a package is stored in the computer when pulled
