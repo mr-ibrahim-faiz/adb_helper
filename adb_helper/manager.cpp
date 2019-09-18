@@ -172,7 +172,7 @@ void packages_uninstaller()
 		
 		if(!paths.empty()){
 			cout << "Removing folders... \n";
-			run_command(string("adb shell \'su -c \"mount -o rw,remount /system\"") + "\' >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c mount -o rw,remount /system >> " + log_filename + " 2>&1");
 			const size_t paths_size = paths.size();
 			for(size_t i = 0; i < paths_size; ++i){
 				const string& path = paths[i];
@@ -183,7 +183,7 @@ void packages_uninstaller()
 			}
 			clear_line(150);
 			display_progression(paths_size-1, paths_size);
-			run_command(string("adb shell \'su -c \"mount -o ro,remount /system\"") + "\' >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c mount -o ro,remount /system >> " + log_filename + " 2>&1");
 			cout << " Done.\n";
 		}
 		else cout << "There is no folder to remove.\n";

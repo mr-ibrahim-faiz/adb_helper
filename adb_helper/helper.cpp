@@ -196,12 +196,12 @@ void update_file(const string& filepath)
 
 			cout << "Pushing file... ";
 			run_command("adb push " + filepath_updated + " /sdcard/ >nul 2>&1");
-			run_command(string("adb shell \'su -c \"mount -o rw,remount /system\"") + "\' >> " + log_filename + " 2>&1");
-			run_command("adb shell \'su -c \"mv /sdcard/" + filename + " " + filepath + "\"" + "\' >> " + log_filename + " 2>&1" );
-			run_command("adb shell \'su -c \"chmod 644 " + filepath + "\"" + "\' >> " + log_filename + " 2>&1");
-			run_command("adb shell \'su -c \"chown root " + filepath + "\"" + "\' >> " + log_filename + " 2>&1");
-			run_command("adb shell \'su -c \"chgrp root " + filepath + "\"" + "\' >> " + log_filename + " 2>&1");
-			run_command(string("adb shell \'su -c \"mount -o ro,remount /system\"") + "\' >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c mount -o rw,remount /system >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c mv /sdcard/" + filename + " " + filepath + " >> " + log_filename + " 2>&1" );
+			run_command("adb shell su -c chmod 644 " + filepath + " >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c chown root " + filepath + " >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c chgrp root " + filepath + " >> " + log_filename + " 2>&1");
+			run_command("adb shell su -c mount -o ro,remount /system >> " + log_filename + " 2>&1");
 			cout << "Done.\n";
 			run_command("adb reboot");
 		}
