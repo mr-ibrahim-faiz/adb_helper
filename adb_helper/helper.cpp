@@ -44,6 +44,7 @@ void display_pull_menu()
 	cout << "[4] Pull app\n";
 	cout << "[5] Pull hosts\n";
 	cout << "[6] Pull build.prop\n";
+	cout << "[7] Pull mkshrc\n";
 	cout << "[x] Main menu\n";
 }
 
@@ -102,6 +103,14 @@ try
 			const string path_build_prop { "/system/build.prop" };
 			update_file(path_build_prop);
 		}
+			break;
+
+		case '7':
+		{
+			const string path_mkshrc{ "/etc/mkshrc" };
+			update_file(path_mkshrc);
+		}
+			break;
 
 		case exit_character:
 			break;
