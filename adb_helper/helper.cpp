@@ -144,9 +144,13 @@ void backup_files()
 	const string device_dcim { "/sdcard/DCIM" };
 	const string device_pictures { "/sdcard/Pictures" };
 	const string sdcard_dcim { "/storage/2065-AB5B/DCIM" };
+	const string sdcard_photos { "/storage/2065-AB5B/Photos" };
 
 	// backs up other files 
 	const string device_sounds { "/sdcard/Sounds" };
+	const string device_download { "/sdcard/Download" };
+	const string device_telegram { "/sdcard/Telegram" };
+	const string device_textra { "/sdcard/Textra" };
 			
 	// backs up LP/Backup
 	const string device_LP { "/sdcard/LuckyPatcher/Backup" };
@@ -154,22 +158,25 @@ void backup_files()
 	// backs up TWRP
 	// const string sdcard_twrp { "/storage/2065-AB5B/TWRP" };
 
-	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP };
+	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, sdcard_photos, device_sounds, device_download, device_telegram, device_textra, device_LP };
 	// const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP, sdcard_twrp };
 
 	if(!paths.empty()){
 		cout << "Backing up file(s)...\n";
 
+		size_t clear_line_length = 21;
+
 		const size_t size = paths.size();
 		for(size_t i = 0; i < size; ++i){
 			const string& path = paths[i];
-			clear_line(150);
+			clear_line(clear_line_length);
 			display_progression(i, size);
 			cout << " Backing up " << path <<  " " << std::flush;
 			backup_and_remove_directory(path);
+			clear_line_length = 19 + path.length();
 		}
 
-		clear_line(150);
+		clear_line(clear_line_length);
 		display_progression(size-1, size);
 		cout << " Done.\n";
 		open_directory(backup_root_directory);

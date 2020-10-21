@@ -20,7 +20,8 @@ int backup_directory(const string& directory_path)
 	catch(runtime_error& e){
 		const string error_message = "Error: " + string(e.what()) + "\n"; 
 		write_to_file(log_filename, error_message);
-		clear_line(150);
+		size_t clear_line_length = 19 + directory_path.length();
+		clear_line(clear_line_length);
 		cerr << "Error: unable to pull " << directory_path << ".\n";
 		return 1;
 	}
