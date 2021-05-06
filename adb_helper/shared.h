@@ -2,7 +2,6 @@
 #define SHARED_H
 
 #include "Windows.h"
-
 #include "package.h"
 
 #include<string>
@@ -21,7 +20,9 @@ const string log_filename { "/tmp/adb.helper.log" };
 constexpr char yes { 'y' };
 constexpr char no { 'n' };
 constexpr size_t valid_choice_length { 1 };
+constexpr size_t progression_output_length { 7 };
 const string INVALID_CHOICE = "0";
+const string empty_space { " " };
 
 // user-defined type Type
 // defines the type of a package
@@ -96,6 +97,6 @@ void list_packages(const string& pattern = string{});
 vector<Package> get_packages_information(const Type& type = Type::all);
 
 // trims line
-string trim_line(const string& line, const size_t& number_of_ignored_characters);
+string trim_line(const string& line, const size_t& number_of_ignored_characters = 0);
 
 #endif
