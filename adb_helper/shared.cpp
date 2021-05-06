@@ -14,6 +14,7 @@ using std::to_string;
 #include<iostream>
 using std::cerr;
 using std::cout;
+using std::streamsize;
 
 #include<iomanip>
 using std::setw;
@@ -30,6 +31,24 @@ const string empty_string { "" };
 constexpr char carriage_return { '\r' };
 constexpr char backslash { '\\' };
 const string package_prefix { "package:" };
+
+// gets terminal windows size
+TerminalWindowSize get_terminal_window_size()
+// retrieves the number of columns and rows of the terminal window
+{
+	TerminalWindowSize tws {};
+
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	const HANDLE output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	const BOOL has_succeeded = GetConsoleScreenBufferInfo(output_handle, &csbi);
+
+	if (has_succeeded) {
+		tws.columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+		tws.rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+	}
+
+	return tws;
+}
 
 // runs command
 void run_command(const string& command)
@@ -168,11 +187,13 @@ string process_name_if(const string& name)
 }
 
 // clears line
-void clear_line(const int& length)
+void clear_line()
 // replaces a number of characters by spaces in the last line printed on screen 
 {
 	cout << carriage_return;
-	cout << setw(length) << empty_string;
+	TerminalWindowSize tws = get_terminal_window_size();
+	const size_t length = (size_t) tws.columns - 1;
+	cout << setw((streamsize)length) << empty_string;
 	cout << carriage_return;
 }
 

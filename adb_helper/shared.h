@@ -1,6 +1,8 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include "Windows.h"
+
 #include "package.h"
 
 #include<string>
@@ -26,6 +28,15 @@ const string INVALID_CHOICE = "0";
 enum class Type {
 	nosystem, system, all
 };
+
+// user-defined type TerminalWindowSize
+struct TerminalWindowSize {
+	SHORT columns;
+	SHORT rows;
+};
+
+// gets terminal windows size
+TerminalWindowSize get_terminal_window_size();
 
 // runs command
 void run_command(const string&);
