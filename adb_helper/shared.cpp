@@ -232,3 +232,26 @@ vector<Package> get_packages_information(const Type& type)
 
 	return packages;
 }
+
+// trims line
+string trim_line(const string& line, const size_t& number_of_ignored_characters)
+// trims a string sequence so it can fit the terminal window
+// 3 dots are added, e.g., azertyuio becomes aze...uio
+{
+	string line_trimmed { line };
+	const string hidden_sequence { "..." };
+
+	TerminalWindowSize tws = get_terminal_window_size();
+	if(number_of_ignored_characters > tws.columns - hidden_sequence.length() - 1) return hidden_sequence;
+	const size_t length = (size_t) tws.columns - number_of_ignored_characters - hidden_sequence.length() - 1;
+	const size_t position = length/2;
+
+	// if(name.size() + progression_output_length > length){
+	if(line.length() > length){
+		line_trimmed = line.substr(0, position);
+		line_trimmed.append(hidden_sequence);
+		line_trimmed.append(line.substr(line.size() - position));
+	}
+
+	return line_trimmed;
+}

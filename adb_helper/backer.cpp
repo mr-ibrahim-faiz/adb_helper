@@ -3,6 +3,7 @@
 
 #include<iostream>
 using std::cerr;
+using std::endl;
 
 #include<stdexcept>
 using std::runtime_error;
@@ -18,11 +19,11 @@ int backup_directory(const string& directory_path)
 		run_command(command);
 	}
 	catch(runtime_error& e){
-		const string error_message = "Error: " + string(e.what()) + "\n"; 
-		write_to_file(log_filename, error_message);
-		size_t clear_line_length = 19 + directory_path.length();
-		clear_line(clear_line_length);
-		cerr << "Error: unable to pull " << directory_path << ".\n";
+		const string log_message = "Error: " + string(e.what()) + "\n";
+		write_to_file(log_filename, log_message);
+		clear_line();
+		const string error_message = "Error: unable to pull " + directory_path + ".";
+		cerr << trim_line(error_message) << endl;
 		return 1;
 	}
 	return 0;

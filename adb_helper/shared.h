@@ -39,7 +39,7 @@ struct TerminalWindowSize {
 TerminalWindowSize get_terminal_window_size();
 
 // runs command
-void run_command(const string&);
+void run_command(const string& command);
 
 // creates file if it doesn't exist
 void create_file(const string&);
@@ -87,12 +87,15 @@ bool isparenthesis(int);
 string process_name_if(const string&);
 
 // clears line
-void clear_line(const int&);
+void clear_line();
 
 // lists packages
 void list_packages(const string& = string{});
 
 // gets packages information
 vector<Package> get_packages_information(const Type& = Type::all);
+
+// trims line
+string trim_line(const string& line, const size_t& number_of_ignored_characters);
 
 #endif
