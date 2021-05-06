@@ -5,6 +5,7 @@
 using std::cin;
 using std::cout;
 using std::cerr;
+using std::endl;
 
 #include<stdexcept>
 using std::runtime_error;
@@ -23,10 +24,11 @@ void install_package(const string& package_name){
 		run_command(command);
 	}
 	catch(runtime_error& e){
-		const string error_message = "Error: " + string(e.what()) + "\n"; 
-		write_to_file(log_filename, error_message);
-		clear_line(150);
-		cerr << "Error: unable to install " << package_name << ".\n"; 
+		const string log_message = "Error: " + string(e.what()) + "\n";
+		write_to_file(log_filename, log_message);
+		clear_line();
+		const string error_message = "Error: unable to install " + package_name + ".";
+		cerr << trim_line(error_message) << endl;
 	}
 }
 
@@ -37,10 +39,11 @@ void uninstall_package(const string& package_name, const bool& with_root_privile
 		run_command(command);
 	}
 	catch(runtime_error& e){
-		const string error_message = "Error: " + string(e.what()) + "\n"; 
-		write_to_file(log_filename, error_message);
-		clear_line(150);
-		cerr << "Error: unable to uninstall " << package_name << ".\n"; 
+		const string log_message = "Error: " + string(e.what()) + "\n";
+		write_to_file(log_filename, log_message);
+		clear_line();
+		const string error_message = "Error: unable to uninstall " + package_name + ".";
+		cerr << trim_line(error_message) << endl;
 	}
 }
 
@@ -51,10 +54,11 @@ void clear_package(const string& package_name, const bool& with_root_privileges)
 		run_command(command);
 	}
 	catch(runtime_error& e){
-		const string error_message = "Error: " + string(e.what()) + "\n"; 
-		write_to_file(log_filename, error_message);
-		clear_line(150);
-		cerr << "Error: unable to clear " << package_name << ".\n"; 
+		const string log_message = "Error: " + string(e.what()) + "\n";
+		write_to_file(log_filename, log_message);
+		clear_line();
+		const string error_message = "Error: unable to clear " + package_name + ".";
+		cerr << trim_line(error_message) << endl;
 	}
 }
 
@@ -65,10 +69,11 @@ void disable_package(const string& package_name, const bool& with_root_privilege
 		run_command(command);
 	}
 	catch(runtime_error& e){
-		const string error_message = "Error: " + string(e.what()) + "\n"; 
-		write_to_file(log_filename, error_message);
-		clear_line(150);
-		cerr << "Error: unable to disable " << package_name << ".\n"; 
+		const string log_message = "Error: " + string(e.what()) + "\n";
+		write_to_file(log_filename, log_message);
+		clear_line();
+		const string error_message = "Error: unable to disable " + package_name + ".";
+		cerr << trim_line(error_message) << endl;
 	}
 }
 
@@ -86,12 +91,16 @@ void packages_installer(const string& path)
 		const size_t size = packages.size();
 		for(size_t i = 0; i < size; ++i){
 			const string& name = packages[i];
-			clear_line(150);
+			clear_line();
 			display_progression(i, size);
-			cout << " Installing " << name << " " << std::flush;
+			cout << empty_space;
+
+			const string message = "Installing " + name + " ";
+			const size_t number_of_ignored_characters { progression_output_length };
+			cout << trim_line(message, number_of_ignored_characters) << std::flush;
 			install_package(path + process_name_if(name));
 		}
-		clear_line(150);
+		clear_line();
 		display_progression(size-1, size);
 		cout << " Done.\n";
 
@@ -137,13 +146,14 @@ void packages_uninstaller()
 
 	for(size_t i = 0; i < package_size; ++i) {
 		const string& name = packages[i];
-		clear_line(150);
+		clear_line();
 		display_progression(i, package_size);
-		cout << name << std::flush;
+		const size_t number_of_ignored_characters { progression_output_length };
+		cout << trim_line(name, number_of_ignored_characters) << std::flush;
 		string path = get_package_path(name, packages_information);
 		if(!path.empty()) paths.push_back(path);
 	}
-	clear_line(150);
+	clear_line();
 	if(package_size == 0) display_progression(1, 2);
 	else display_progression(package_size -1, package_size);
 	cout << " Done.\n\n";
@@ -153,20 +163,33 @@ void packages_uninstaller()
 		
 		for(size_t i = 0; i < package_size; ++i){
 			const string& name = packages[i];
-			clear_line(150);
+			const size_t number_of_ignored_characters { progression_output_length };
+
+			clear_line();
 			display_progression(i, package_size);
-			cout << " Clearing " << name << "... " << std::flush;
+			cout << empty_space;
+
+			const string message_clearing = "Clearing " + name + "... ";
+			cout << trim_line(message_clearing, number_of_ignored_characters) << std::flush;
 			clear_package(name, true);
-			clear_line(150);
+
+			clear_line();
 			display_progression(i, package_size);
-			cout << " Disabling " << name << "... " << std::flush;
+			cout << empty_space;
+
+			const string message_disabling = "Disabling " + name + "... ";
+			cout << trim_line(message_disabling, number_of_ignored_characters) << std::flush;
 			disable_package(name, true);
-			clear_line(150);
+
+			clear_line();
 			display_progression(i, package_size);
-			cout << " Uninstalling " << name << "... " << std::flush;
+			cout << empty_space;
+
+			const string message_uninstalling = "Uninstalling " + name + "... ";
+			cout << trim_line(message_uninstalling, number_of_ignored_characters) << std::flush;
 			uninstall_package(name, true);
 		}
-		clear_line(150);
+		clear_line();
 		display_progression(package_size-1, package_size);
 		cout << " Done.\n\n";
 		
@@ -176,12 +199,12 @@ void packages_uninstaller()
 			const size_t paths_size = paths.size();
 			for(size_t i = 0; i < paths_size; ++i){
 				const string& path = paths[i];
-				clear_line(150);
+				clear_line();
 				display_progression(i, paths_size);
 				cout << " Removing " << path << "... " << std::flush;
 				remove_directory_phone(path);
 			}
-			clear_line(150);
+			clear_line();
 			display_progression(paths_size-1, paths_size);
 			run_command("adb shell su -c mount -o ro,remount /system >> " + log_filename + " 2>&1");
 			cout << " Done.\n";

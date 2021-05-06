@@ -7,6 +7,7 @@
 using std::cin;
 using std::cout;
 using std::cerr;
+using std::flush;
 
 #include<stdexcept>
 using std::runtime_error;
@@ -159,24 +160,24 @@ void backup_files()
 	// const string sdcard_twrp { "/storage/2065-AB5B/TWRP" };
 
 	const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, sdcard_photos, device_sounds, device_download, device_telegram, device_textra, device_LP };
-	// const vector<string> paths { device_dcim, device_pictures, sdcard_dcim, device_sounds, device_LP, sdcard_twrp };
 
 	if(!paths.empty()){
 		cout << "Backing up file(s)...\n";
 
-		size_t clear_line_length = 21;
-
 		const size_t size = paths.size();
 		for(size_t i = 0; i < size; ++i){
 			const string& path = paths[i];
-			clear_line(clear_line_length);
+			clear_line();
 			display_progression(i, size);
-			cout << " Backing up " << path <<  " " << std::flush;
+			cout << empty_space;
+
+			const string message = "Backing up " + path + " ";
+			const size_t number_of_ignored_characters { progression_output_length };
+			cout << trim_line(path, number_of_ignored_characters) << flush;
 			backup_and_remove_directory(path);
-			clear_line_length = 19 + path.length();
 		}
 
-		clear_line(clear_line_length);
+		clear_line();
 		display_progression(size-1, size);
 		cout << " Done.\n";
 		open_directory(backup_root_directory);
