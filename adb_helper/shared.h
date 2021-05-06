@@ -42,58 +42,58 @@ TerminalWindowSize get_terminal_window_size();
 void run_command(const string& command);
 
 // creates file if it doesn't exist
-void create_file(const string&);
+void create_file(const string& filename);
 
 // removes file
-void remove_file(const string&);
+void remove_file(const string& filename);
 
 // removes directory from computer
-void remove_directory(const string&);
+void remove_directory(const string& directory);
 
 // removes directory from phone
-void remove_directory_phone(const string&);
+void remove_directory_phone(const string& directory);
 
 // gets path
-string get_path(const string&);
+string get_path(const string& filepath);
 
 // gets package path
-string get_package_path(const string&, const vector<Package>&);
+string get_package_path(const string& name, const vector<Package>& packages);
 
 // gets file name
-string get_filename(const string&);
+string get_filename(const string& filepath);
 
 // creates directory
-void create_directory(const string&);
+void create_directory(const string& path);
 
 // opens directory
-void open_directory(const string&);
+void open_directory(const string& path);
 
 // lists files
-void list_files(const string&, const string&, const string& = ".");
+void list_files(const string& path_directory, const string& path_file, const string& pattern= ".");
 
 // gets data from a file
-vector<string> get_lines(const string&);
+vector<string> get_lines(const string& filename);
 
 // displays progression
-void display_progression(const size_t&, const size_t &);
+void display_progression(const size_t& position, const size_t & total);
 
 // writes to a file
-void write_to_file(const string&, const string&, const ios_base::openmode& = ios_base::app);
+void write_to_file(const string& filename, const string& stream, const ios_base::openmode& mode = ios_base::app);
 
 // checks if character is parenthesis
-bool isparenthesis(int);
+bool isparenthesis(int c);
 
 // processes filename
-string process_name_if(const string&);
+string process_name_if(const string& name);
 
 // clears line
 void clear_line();
 
 // lists packages
-void list_packages(const string& = string{});
+void list_packages(const string& pattern = string{});
 
 // gets packages information
-vector<Package> get_packages_information(const Type& = Type::all);
+vector<Package> get_packages_information(const Type& type = Type::all);
 
 // trims line
 string trim_line(const string& line, const size_t& number_of_ignored_characters);
