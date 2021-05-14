@@ -14,8 +14,12 @@ int backup_directory(const string& directory_path)
 // returns 0 if the operation succeeded,
 // returns 1 otherwise
 {
+	const string directory_thumbnails = directory_path + "/.thumbnails";
+	const string directory_gallery2 = directory_path + "/.Gallery2";
 	const string command = "adb pull " + directory_path + " " + backup_root_directory + " >> " + log_filename; 
 	try {
+		remove_directory_phone(directory_thumbnails);
+		remove_directory_phone(directory_gallery2);
 		run_command(command);
 	}
 	catch(runtime_error& e){

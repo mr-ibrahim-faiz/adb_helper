@@ -173,7 +173,7 @@ void backup_files()
 
 			const string message = "Backing up " + path + " ";
 			const size_t number_of_ignored_characters { progression_output_length };
-			cout << trim_line(path, number_of_ignored_characters) << flush;
+			cout << trim_line(message, number_of_ignored_characters) << flush;
 			backup_and_remove_directory(path);
 		}
 
